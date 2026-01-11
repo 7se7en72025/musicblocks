@@ -47,7 +47,8 @@ class PasteBox {
             this.activity.refreshCanvas();
             // paste.visible = false;
             docById("paste").value = "";
-            docById("paste").style.visibility = "hidden";
+            docById("paste").classList.add("visibility-hidden");
+            docById("paste").classList.remove("visibility-visible");
         }
     }
 
@@ -85,7 +86,8 @@ class PasteBox {
         this._container.visible = true;
         this.activity.refreshCanvas();
         // this._paste.visibile = true;
-        docById("paste").style.visibility = "visible";
+        docById("paste").classList.remove("visibility-hidden");
+        docById("paste").classList.add("visibility-visible");
     }
 
     /**

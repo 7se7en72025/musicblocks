@@ -138,7 +138,7 @@ class Palettes {
         const td = tr.insertCell();
         td.width = 1.5 * this.cellSize;
         td.height = 1.5 * this.cellSize;
-        td.style.position = "relative";
+        td.classList.add("palette-selector-cell");
         td.style.backgroundColor = platformColor.paletteBackground;
         td.appendChild(
             makePaletteIcons(
@@ -151,11 +151,7 @@ class Palettes {
             )
         );
         const cover = document.createElement("div");
-        cover.style.position = "absolute";
-        cover.style.zIndex = "10";
-        cover.style.top = "0";
-        cover.style.width = "100%";
-        cover.style.height = "1px";
+        cover.classList.add("palette-cover");
         cover.style.background = platformColor.paletteLabelBackground;
         td.appendChild(cover);
         td.onmouseover = () => {
@@ -299,19 +295,14 @@ class Palettes {
         const img = row.insertCell(-1);
         const label = row.insertCell(-1);
         img.appendChild(icon);
-        img.style.padding = "4px";
-        img.style.boxSizing = "content-box";
+        img.classList.add("palette-btn-icon");
         img.style.width = `${this.cellSize}px`;
         img.style.height = `${this.cellSize}px`;
         label.textContent = toTitleCase(_(name));
         label.style.color = platformColor.paletteText;
-        row.style.borderBottom = "1px solid #0CAFFF";
-        label.style.fontSize = localStorage.kanaPreference === "kana" ? "12px" : "16px";
-        label.style.padding = "4px";
-        row.style.display = "flex";
-        row.style.flexDirection = "row";
-        row.style.alignItems = "center";
-        row.style.width = "126px";
+        row.classList.add("palette-row", "palette-row-bordered");
+        label.classList.add("palette-btn-label");
+        label.classList.add(localStorage.kanaPreference === "kana" ? "font-size-kana" : "font-size-default");
         row.style.backgroundColor = platformColor.paletteBackground;
 
         this._loadPaletteButtonHandler(name, row);
@@ -322,18 +313,14 @@ class Palettes {
         const img = row.insertCell(-1);
         const label = row.insertCell(-1);
         img.appendChild(icon);
-        img.style.padding = "4px";
-        img.style.boxSizing = "content-box";
+        img.classList.add("palette-btn-icon");
         img.style.width = `${this.cellSize}px`;
         img.style.height = `${this.cellSize}px`;
         label.textContent = toTitleCase(_(name));
         label.style.color = platformColor.paletteText;
-        label.style.fontSize = localStorage.kanaPreference === "kana" ? "12px" : "16px";
-        label.style.padding = "4px";
-        row.style.display = "flex";
-        row.style.flexDirection = "row";
-        row.style.alignItems = "center";
-        row.style.width = "126px";
+        label.classList.add("palette-btn-label");
+        label.classList.add(localStorage.kanaPreference === "kana" ? "font-size-kana" : "font-size-default");
+        row.classList.add("palette-row");
         row.style.backgroundColor = platformColor.paletteBackground;
         row.addEventListener("mouseover", () => {
             row.style.backgroundColor = platformColor.hoverColor;

@@ -313,11 +313,15 @@ class Toolbar {
         const advancedMode = docById("advancedMode");
         if (this.activity.beginnerMode) {
             // || mode === "null") {
-            advancedMode.style.display = "block";
-            beginnerMode.style.display = "none";
+            advancedMode.classList.remove("hidden");
+            advancedMode.classList.add("visible");
+            beginnerMode.classList.remove("visible");
+            beginnerMode.classList.add("hidden");
         } else {
-            advancedMode.style.display = "none";
-            beginnerMode.style.display = "display";
+            advancedMode.classList.remove("visible");
+            advancedMode.classList.add("hidden");
+            beginnerMode.classList.remove("hidden");
+            beginnerMode.classList.add("visible");
         }
 
         for (let i = 0; i < strings.length; i++) {
@@ -362,11 +366,13 @@ class Toolbar {
         }
 
         logoIcon.onmouseenter = () => {
-            document.body.style.cursor = "pointer";
+            document.body.classList.remove("cursor-default");
+            document.body.classList.add("cursor-pointer");
         };
 
         logoIcon.onmouseleave = () => {
-            document.body.style.cursor = "default";
+            document.body.classList.remove("cursor-pointer");
+            document.body.classList.add("cursor-default");
         };
 
         logoIcon.onclick = () => {
@@ -406,7 +412,8 @@ class Toolbar {
             isPlayIconRunning = false;
             onclick(this.activity);
             handleClick();
-            stopIcon.style.color = this.stopIconColorWhenPlaying;
+            stopIcon.classList.add("stop-icon-playing");
+            stopIcon.classList.remove("stop-icon-default");
             saveButton.disabled = true;
             saveButtonAdvanced.disabled = true;
             saveButton.className = "grey-text inactiveLink";
@@ -438,7 +445,8 @@ class Toolbar {
         const recordButton = docById("record");
         stopIcon.onclick = () => {
             onclick(this.activity);
-            stopIcon.style.color = "white";
+            stopIcon.classList.remove("stop-icon-playing");
+            stopIcon.classList.add("stop-icon-default");
             saveButton.disabled = false;
             saveButtonAdvanced.disabled = false;
             saveButton.className = "";
@@ -477,9 +485,11 @@ class Toolbar {
         confirmationButtonLi.appendChild(confirmationButton);
         newDropdown.appendChild(confirmationButtonLi);
 
-        modalContainer.style.display = "flex";
+        modalContainer.classList.remove("modal-hidden");
+        modalContainer.classList.add("modal-visible");
         confirmationButton.onclick = () => {
-            modalContainer.style.display = "none";
+            modalContainer.classList.remove("modal-visible");
+            modalContainer.classList.add("modal-hidden");
             onclick(this.activity);
         };
 
@@ -492,9 +502,11 @@ class Toolbar {
         cancelButtonLi.appendChild(cancelButton);
         newDropdown.appendChild(cancelButtonLi);
         cancelButton.onclick = () => {
-            modalContainer.style.display = "none";
+            modalContainer.classList.remove("modal-visible");
+            modalContainer.classList.add("modal-hidden");
         };
-        modalContainer.style.display = "flex";
+        modalContainer.classList.remove("modal-hidden");
+        modalContainer.classList.add("modal-visible");
     }
 
     /**
@@ -616,8 +628,9 @@ class Toolbar {
             delay: 100
         });
 
-        if (docById("helpfulWheelDiv").style.display !== "none") {
-            docById("helpfulWheelDiv").style.display = "none";
+        const helpfulWheelDiv = docById("helpfulWheelDiv");
+        if (!helpfulWheelDiv.classList.contains("hidden")) {
+            helpfulWheelDiv.classList.add("hidden");
         }
     }
 
@@ -658,8 +671,10 @@ class Toolbar {
                     html_onclick(this.activity);
                 };
             } else {
-                saveButton.style.display = "block";
-                saveButtonAdvanced.style.display = "none";
+                saveButton.classList.remove("hidden");
+                saveButton.classList.add("visible");
+                saveButtonAdvanced.classList.remove("visible");
+                saveButtonAdvanced.classList.add("hidden");
                 saveButton.onclick = () => {
                     const saveHTML = docById("save-html-beg");
                     console.debug(saveHTML);
@@ -692,8 +707,10 @@ class Toolbar {
             }
         } else {
             console.debug("ADVANCED MODE BUTTONS");
-            saveButton.style.display = "none";
-            saveButtonAdvanced.style.display = "block";
+            saveButton.classList.remove("visible");
+            saveButton.classList.add("hidden");
+            saveButtonAdvanced.classList.remove("hidden");
+            saveButtonAdvanced.classList.add("visible");
             saveButtonAdvanced.onclick = () => {
                 const saveHTML = docById("save-html");
                 //console.debug(saveHTML);
@@ -787,7 +804,8 @@ class Toolbar {
             return;
         }
 
-        Record.style.display = "block";
+        Record.classList.remove("hidden");
+        Record.classList.add("visible");
         Record.innerHTML = `<i class="material-icons main">${RECORDBUTTON}</i>`;
         Record.onclick = () => rec_onclick(this.activity);
     }
@@ -803,14 +821,15 @@ class Toolbar {
         const planetIconDisabled = docById("planetIconDisabled");
         if (planet) {
             planetIcon.onclick = () => {
-                docById("toolbars").style.display = "none";
-                docById("wheelDiv").style.display = "none";
-                docById("contextWheelDiv").style.display = "none";
+                docById("toolbars").classList.add("hidden");
+                docById("wheelDiv").classList.add("hidden");
+                docById("contextWheelDiv").classList.add("hidden");
                 onclick(this.activity);
             };
         } else {
-            planetIcon.style.display = "none";
-            planetIconDisabled.style.display = "block";
+            planetIcon.classList.add("hidden");
+            planetIconDisabled.classList.remove("hidden");
+            planetIconDisabled.classList.add("visible");
         }
     }
 
@@ -825,18 +844,20 @@ class Toolbar {
         menuIcon.onclick = () => {
             var searchBar = docById("search");
             searchBar.classList.toggle("open");
-            if (auxToolbar.style.display == "" || auxToolbar.style.display == "none") {
+            if (auxToolbar.classList.contains("hidden") || !auxToolbar.classList.contains("visible")) {
                 onclick(this.activity, false);
-                auxToolbar.style.display = "block";
+                auxToolbar.classList.remove("hidden");
+                auxToolbar.classList.add("visible");
                 menuIcon.innerHTML = "more_vert";
                 docById("toggleAuxBtn").className = "blue darken-1";
             } else {
                 onclick(this.activity, true);
-                auxToolbar.style.display = "none";
+                auxToolbar.classList.remove("visible");
+                auxToolbar.classList.add("hidden");
                 menuIcon.innerHTML = "menu";
                 docById("toggleAuxBtn").className -= "blue darken-1";
-                docById("chooseKeyDiv").style.display = "none";
-                docById("movable").style.display = "none";
+                docById("chooseKeyDiv").classList.add("hidden");
+                docById("movable").classList.add("hidden");
             }
         };
     }
@@ -849,12 +870,13 @@ class Toolbar {
     renderRunSlowlyIcon(onclick) {
         const runSlowlyIcon = docById("runSlowlyIcon");
         if (this.activity.beginnerMode && this.language === "ja") {
-            runSlowlyIcon.style.display = "none";
+            runSlowlyIcon.classList.add("hidden");
         }
 
         runSlowlyIcon.onclick = () => {
             onclick(this.activity);
-            docById("stop").style.color = this.stopIconColorWhenPlaying;
+            docById("stop").classList.add("stop-icon-playing");
+            docById("stop").classList.remove("stop-icon-default");
         };
     }
 

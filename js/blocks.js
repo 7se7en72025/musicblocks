@@ -2171,7 +2171,10 @@ class Blocks {
             if (this.activity.turtles.running()) {
                 this.activity.logo.doStopTurtles();
                 const stopBtn = document.getElementById("stop");
-                if (stopBtn) stopBtn.style.color = "white";
+                if (stopBtn) {
+                    stopBtn.classList.remove("stop-icon-playing");
+                    stopBtn.classList.add("stop-icon-default");
+                }
             }
         };
 
@@ -5115,17 +5118,18 @@ class Blocks {
 
             /** Reposition the paste location relative to the stage position. */
             if (this.selectedBlocksObj != null) {
-                if (docById("helpfulWheelDiv").style.display !== "none") {
+                const helpfulWheelDiv = docById("helpfulWheelDiv");
+                if (!helpfulWheelDiv.classList.contains("hidden")) {
                     this.selectedBlocksObj[0][2] =
-                        docById("helpfulWheelDiv").offsetLeft +
+                        helpfulWheelDiv.offsetLeft +
                         240 -
                         this.activity.blocksContainer.x;
                     this.selectedBlocksObj[0][3] =
-                        docById("helpfulWheelDiv").offsetTop +
+                        helpfulWheelDiv.offsetTop +
                         130 -
                         this.activity.blocksContainer.y;
 
-                    docById("helpfulWheelDiv").style.display = "none";
+                    helpfulWheelDiv.classList.add("hidden");
                 } else {
                     this.selectedBlocksObj[0][2] =
                         175 - this.activity.blocksContainer.x + this.pasteDx;
@@ -6758,8 +6762,9 @@ class Blocks {
                 }
             }
 
-            document.body.style.cursor = "default";
-            document.getElementById("load-container").style.display = "none";
+            document.body.classList.remove("cursor-wait", "cursor-pointer");
+            document.body.classList.add("cursor-default");
+            document.getElementById("load-container").classList.add("hidden");
             // Stop the loading animation interval to prevent CPU waste
             if (this.activity.stopLoadAnimation) {
                 this.activity.stopLoadAnimation();

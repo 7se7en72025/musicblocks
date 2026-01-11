@@ -972,10 +972,13 @@ class Logo {
 
         this._restoreConnections();
 
-        document.body.style.cursor = "default";
+        document.body.classList.remove("cursor-wait", "cursor-pointer");
+        document.body.classList.add("cursor-default");
         if (this.activity.showBlocksAfterRun) {
             this.activity.blocks.showBlocks();
-            document.getElementById("stop").style.color = "white";
+            const stopBtn = document.getElementById("stop");
+            stopBtn.classList.remove("stop-icon-playing");
+            stopBtn.classList.add("stop-icon-default");
         }
 
         this.activity.showBlocksAfterRun = false;
@@ -1263,7 +1266,8 @@ class Logo {
                 }
             }, delayStart);
         } else {
-            document.body.style.cursor = "default";
+            document.body.classList.remove("cursor-wait", "cursor-pointer");
+            document.body.classList.add("cursor-default");
         }
 
         this.activity.refreshCanvas();

@@ -1,0 +1,198 @@
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.visible-flex {
+    display: flex !important;
+}
+
+.visible-initial {
+    display: initial !important;
+}
+
+.visibility-hidden {
+    visibility: hidden !important;
+}
+
+.visibility-visible {
+    visibility: visible !important;
+}
+
+.cursor-default {
+    cursor: default !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.cursor-wait {
+    cursor: wait !important;
+}
+
+.cursor-text {
+    cursor: text !important;
+}
+
+.palette-container {
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+}
+
+.palette-selector-cell {
+    position: relative;
+}
+
+.palette-cover {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    width: 100%;
+    height: 1px;
+}
+
+.palette-icon {
+    padding: 4px;
+    box-sizing: content-box;
+}
+
+.palette-label {
+    padding: 4px;
+}
+
+.palette-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 126px;
+}
+
+.palette-row-bordered {
+    border-bottom: 1px solid #0CAFFF;
+}
+
+.palette-btn-icon {
+    padding: 4px;
+    box-sizing: content-box;
+}
+
+.palette-btn-label {
+    padding: 4px;
+}
+
+.font-size-kana {
+    font-size: 12px;
+}
+
+.font-size-default {
+    font-size: 16px;
+}
+
+.stop-icon-playing {
+    color: var(--stop-icon-playing-color, #ea174c);
+}
+
+.stop-icon-default {
+    color: white !important;
+}
+
+.modal-visible {
+    display: flex;
+}
+
+.modal-hidden {
+    display: none;
+}
+
+.global-load-visible {
+    display: block;
+}
+
+.global-load-hidden {
+    display: none;
+}
+
+.report-card-visible {
+    display: block;
+}
+
+.report-card-hidden {
+    display: none;
+}
+
+.report-progress-hidden {
+    visibility: hidden;
+}
+
+.report-progress-visible {
+    visibility: visible;
+}
+
+.publisher-error-visible {
+    display: initial;
+}
+
+.publisher-error-hidden {
+    display: none;
+}
+
+.paste-visible {
+    visibility: visible;
+}
+
+.paste-hidden {
+    visibility: hidden;
+}
+
+.load-container-hidden {
+    display: none;
+}
+
+.gif-image-hidden {
+    display: none;
+}
+
+.helpful-wheel-hidden {
+    display: none;
+}
+
+.search-container-visible {
+    display: block;
+}
+
+.search-container-hidden {
+    display: none;
+}
+
+.search-close-hidden {
+    display: none;
+}
+
+.tags-container-visible {
+    display: block;
+}
+
+.tags-container-hidden {
+    display: none;
+}
+
+.sharebox-visible {
+    display: initial;
+}
+
+.mode-button-visible {
+    display: block;
+}
+
+.mode-button-hidden {
+    display: none;
+}
+
+.display-display {
+    display: display;
+}
