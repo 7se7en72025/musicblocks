@@ -24,7 +24,7 @@
    noteIsSolfege, getSolfege, SOLFEGENAMES1, SOLFEGECONVERSIONTABLE,
    getInterval, instrumentsEffects, instrumentsFilters, _, DEFAULTVOICE,
    noteToFrequency, getTemperament, getOctaveRatio, rationalToFraction,
-   SEMITONES
+   SEMITONES, WorkspaceUpdateScheduler
  */
 
 /*
@@ -42,6 +42,13 @@
  */
 
 /* exported Singer */
+
+/**
+ * Minimum milliseconds a highlight must remain visible so the user can
+ * perceive it, regardless of how short the note value is.
+ * @type {number}
+ */
+const MIN_HIGHLIGHT_DURATION_MS = 80;
 
 /**
  * Class pertaining to music related actions for each turtle.
@@ -2479,12 +2486,30 @@ class Singer {
                 // After the note plays, clear the embedded graphics and notes queue.
                 tur.singer.embeddedGraphics[blk] = [];
 
-                // Ensure note value block unhighlights after note plays.
-                setTimeout(() => {
+                // Ensure note value block unhighlights after note plays
+                // (minimum duration so the highlight is visible to the user).
+                //
+                // Cancel any previously pending unhighlight timer for this
+                // block to prevent unbounded timer accumulation in tight
+                // infinite-loop projects, which would otherwise saturate the
+                // JS timer queue and stall the main thread.
+                if (!tur.singer._unhighlightTimers) {
+                    tur.singer._unhighlightTimers = {};
+                }
+                if (tur.singer._unhighlightTimers[blk]) {
+                    clearTimeout(tur.singer._unhighlightTimers[blk]);
+                }
+                const highlightDurationMs = Math.max(beatValue * 1000, MIN_HIGHLIGHT_DURATION_MS);
+                tur.singer._unhighlightTimers[blk] = setTimeout(() => {
                     if (activity.blocks.visible && blk in activity.blocks.blockList) {
                         activity.blocks.unhighlight(blk);
+                        // Use the batched scheduler so concurrent note-block
+                        // timeouts firing in the same tick all share a single
+                        // stage.update() instead of issuing one per block.
+                        activity.blocks.blockUpdateScheduler.scheduleStageUpdate();
                     }
-                }, beatValue * 1000);
+                    delete tur.singer._unhighlightTimers[blk];
+                }, highlightDurationMs);
             };
 
             if (last(tur.singer.inNoteBlock) !== null || noteInNote) {

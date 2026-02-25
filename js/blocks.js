@@ -24,7 +24,8 @@
    getNoiseSynthName, getTemperamentsList, getTextWidth,
    getVoiceSynthName, i18nSolfege, last, MathUtility, mixedNumber,
    piemenuBlockContext, prepareMacroExports, ProtoBlock,
-   setOctaveRatio, splitScaleDegree, splitSolfege, updateTemperaments
+   setOctaveRatio, splitScaleDegree, splitSolfege, updateTemperaments,
+   WorkspaceUpdateScheduler
 */
 
 /*
@@ -158,6 +159,14 @@ class Blocks {
         this.turtles = this.activity.turtles;
         this.boundary = this.activity.boundary;
         this.macroDict = this.activity.macroDict;
+
+        /**
+         * Batched workspace update scheduler — eliminates per-block Paint
+         * Storms and Layout Thrashing by coalescing container.updateCache()
+         * and stage.update() calls into a single requestAnimationFrame flush.
+         * @type {WorkspaceUpdateScheduler}
+         */
+        this.blockUpdateScheduler = new WorkspaceUpdateScheduler(activity);
 
         /** Did the user right click? */
         this.stageClick = false;
@@ -2953,6 +2962,8 @@ class Blocks {
             for (const [blk] of this.blockList.entries()) {
                 this.unhighlight(blk);
             }
+            // A single flush covers all blocks changed in the loop above.
+            this.blockUpdateScheduler.scheduleStageUpdate();
         };
 
         /**
@@ -2977,6 +2988,11 @@ class Blocks {
             if (this.highlightedBlock === thisBlock) {
                 this.highlightedBlock = null;
             }
+
+            // Schedule the stage update; block.unhighlight() already enqueued
+            // a blockUpdate via the scheduler, so this just ensures the stage
+            // composite happens at the same RAF tick.
+            this.blockUpdateScheduler.scheduleStageUpdate();
         };
 
         /**
@@ -2997,6 +3013,9 @@ class Blocks {
                 }
                 this.blockList[blk].highlight();
                 this.highlightedBlock = blk;
+
+                // Flush stage in the same RAF tick as the block cache update.
+                this.blockUpdateScheduler.scheduleStageUpdate();
             }
         };
 

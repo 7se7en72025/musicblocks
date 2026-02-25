@@ -25,6 +25,7 @@
    getModeNumbers, getNoiseName, getTemperament, getTemperamentKeys,
    getTemperamentsList, getTextWidth, hideDOMLabel, HIGHLIGHTSTROKECOLORS,
    i18nSolfege, INVERTMODES, isCustomTemperament, last, MEDIASAFEAREA,
+   WorkspaceUpdateScheduler,
    NATURAL, NOISENAMES, NSYMBOLS, NUMBERBLOCKDEFAULT, OSCTYPES,
    PALETTEFILLCOLORS, PALETTEHIGHLIGHTCOLORS, PALETTESTROKECOLORS,
    piemenuAccidentals, piemenuBasic, piemenuBlockContext,
@@ -620,7 +621,15 @@ class Block {
             }
         }
 
-        this.container.updateCache();
+        // Defer container cache update to the batched scheduler so that
+        // multiple simultaneous highlight changes (e.g. during polyphonic
+        // playback) produce only one stage.update() per animation frame
+        // instead of N independent repaints.
+        if (this.blocks && this.blocks.blockUpdateScheduler) {
+            this.blocks.blockUpdateScheduler.scheduleBlockUpdate(this);
+        } else {
+            this.container.updateCache();
+        }
     }
 
     /**
@@ -702,7 +711,12 @@ class Block {
             }
         }
 
-        this.container.updateCache();
+        // Defer container cache update to the batched scheduler.
+        if (this.blocks && this.blocks.blockUpdateScheduler) {
+            this.blocks.blockUpdateScheduler.scheduleBlockUpdate(this);
+        } else {
+            this.container.updateCache();
+        }
     }
 
     unhighlightSelectedBlocks(blk, selection) {
@@ -711,7 +725,13 @@ class Block {
             if (!this.collapsed) {
                 this.disconnectedBitmap.visible = true;
             }
-            this.container.updateCache();
+            // Defer to scheduler; falls back to direct updateCache when
+            // scheduler is not yet initialised (e.g. early construction).
+            if (this.blocks && this.blocks.blockUpdateScheduler) {
+                this.blocks.blockUpdateScheduler.scheduleBlockUpdate(this);
+            } else {
+                this.container.updateCache();
+            }
         }
     }
 

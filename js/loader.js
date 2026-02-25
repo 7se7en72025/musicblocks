@@ -53,6 +53,9 @@ requirejs.config({
             deps: ["utils/platformstyle"],
             exports: "_"
         },
+        "utils/workspaceUpdateScheduler": {
+            exports: "WorkspaceUpdateScheduler"
+        },
         "activity/turtledefs": {
             deps: ["utils/utils"],
             exports: "createDefaultStack"
@@ -62,7 +65,7 @@ requirejs.config({
             exports: "Block"
         },
         "activity/blocks": {
-            deps: ["activity/block"],
+            deps: ["activity/block", "utils/workspaceUpdateScheduler"],
             exports: "Blocks"
         },
         "activity/turtle-singer": {

@@ -1,116 +1,155 @@
-html, body {
-  overscroll-behavior-x: none;
+html,
+body {
+    overscroll-behavior-x: none;
 }
 
 input[type="range"] {
-  height: 4px;
-  appearance: none;
-  -webkit-appearance: none;
-  width: 250px;
+    height: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 250px;
 }
 
 input[type="range"]:focus {
-  outline: none;
+    outline: none;
 }
 
 input[type="range"]:not(.pitchSlider)::-webkit-slider-runnable-track {
-  width: 10px;
-  height: 11px;
-  cursor: pointer;
-  animation: 0.2s;
-  box-shadow: 1px 1px 1px #000000;
-  background: #90c100;
-  border-radius: 1px;
-  border: 0px solid #010101;
+    width: 10px;
+    height: 11px;
+    cursor: pointer;
+    animation: 0.2s;
+    box-shadow: 1px 1px 1px #000000;
+    background: #90c100;
+    border-radius: 1px;
+    border: 0px solid #010101;
 }
 
 input[type="range"]:not(.pitchSlider)::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000031;
-  border: 1px solid #00001e;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: blue;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -8px;
+    box-shadow: 1px 1px 1px #000031;
+    border: 1px solid #00001e;
+    height: 26px;
+    width: 26px;
+    border-radius: 15px;
+    background: blue;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -8px;
 }
 
 input[type="range"]:not(.pitchSlider):focus::-webkit-slider-runnable-track {
-  background: #90c100;
+    background: #90c100;
 }
 
 input[type="range"]:not(.pitchSlider)::-moz-range-track {
-  width: 100%;
-  height: 4px;
-  cursor: pointer;
-  animation: 0.2s;
-  box-shadow: 1px 1px 1px #000000;
-  background: #90c100;
-  border-radius: 1px;
-  border: 0px solid #010101;
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    animation: 0.2s;
+    box-shadow: 1px 1px 1px #000000;
+    background: #90c100;
+    border-radius: 1px;
+    border: 0px solid #010101;
 }
 
 input[type="range"]:not(.pitchSlider)::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000031;
-  border: 1px solid #00001e;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #ffffff;
-  cursor: pointer;
+    box-shadow: 1px 1px 1px #000031;
+    border: 1px solid #00001e;
+    height: 26px;
+    width: 26px;
+    border-radius: 15px;
+    background: #ffffff;
+    cursor: pointer;
 }
 
 input[type="range"]::-ms-track {
-  width: 100%;
-  height: 11px;
-  cursor: pointer;
-  animation: 0.2s;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
+    width: 100%;
+    height: 11px;
+    cursor: pointer;
+    animation: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
 }
 
 input[type="range"]::-ms-fill-lower {
-  background: #90c100;
-  border: 0px solid #010101;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px #000000;
+    background: #90c100;
+    border: 0px solid #010101;
+    border-radius: 2px;
+    box-shadow: 1px 1px 1px #000000;
 }
 
 input[type="range"]::-ms-fill-upper {
-  background: #90c100;
-  border: 0px solid #010101;
-  border-radius: 2px;
-  box-shadow: 1px 1px 1px #000000;
+    background: #90c100;
+    border: 0px solid #010101;
+    border-radius: 2px;
+    box-shadow: 1px 1px 1px #000000;
 }
 
 input[type="range"]::-ms-thumb {
-  margin-top: 1px;
-  box-shadow: 1px 1px 1px #000031;
-  border: 1px solid #00001e;
-  height: 26px;
-  width: 26px;
-  border-radius: 15px;
-  background: #ffffff;
-  cursor: pointer;
+    margin-top: 1px;
+    box-shadow: 1px 1px 1px #000031;
+    border: 1px solid #00001e;
+    height: 26px;
+    width: 26px;
+    border-radius: 15px;
+    background: #ffffff;
+    cursor: pointer;
 }
 
 input[type="range"]:focus::-ms-fill-lower {
-  background: #90c100;
+    background: #90c100;
 }
 
 input[type="range"]:focus::-ms-fill-upper {
-  background: #90c100;
+    background: #90c100;
 }
 
 .lego-brick {
     display: inline-block;
-    background-color: #FF0000;
+    background-color: #ff0000;
     border: 1px solid #880000;
     margin: 2px;
 }
 
-.lego-size-1 { width: 20px; height: 10px; }
-.lego-size-2 { width: 40px; height: 10px; }
+.lego-size-1 {
+    width: 20px;
+    height: 10px;
+}
+.lego-size-2 {
+    width: 40px;
+    height: 10px;
+}
 /* ... more sizes ... */
+
+/* =========================================================================
+   Workspace performance — Layout-Thrashing & Paint-Storm mitigations
+   =========================================================================
+   #canvasContainer is the sole parent of #myCanvas (the EaselJS stage).
+   Declaring `will-change: transform` here tells the compositor to promote
+   this subtree to a dedicated GPU layer *before* any block highlight
+   animation begins, so paint invalidations stay within the layer and never
+   trigger a full-document restyle or layout pass.
+
+   `contain: strict` creates a new block-formatting context and restricts
+   overflow, scroll and size containment to this element, preventing
+   getBoundingClientRect / offsetWidth reads elsewhere in the page from
+   forcing a synchronous layout recalc caused by changes inside the canvas
+   container (the classic "Layout Thrashing" root cause).
+   ========================================================================= */
+#canvasContainer {
+    will-change: transform;
+    contain: strict;
+}
+
+/* #myCanvas — the raw EaselJS raster surface.
+   `transform: translateZ(0)` is a widely supported fallback that forces
+   GPU-layer promotion on browsers that ignore will-change.
+   We do NOT set will-change here permanently; the WorkspaceUpdateScheduler
+   (js/utils/workspaceUpdateScheduler.js) toggles will-change: transform on
+   this element dynamically — only while a batched update is pending — and
+   resets it to "auto" once the frame is flushed, avoiding long-lived GPU
+   memory waste for idle canvases in large projects. */
+#myCanvas {
+    transform: translateZ(0);
+}
